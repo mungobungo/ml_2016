@@ -63,14 +63,7 @@ function response = submitParts(conf, email, token, parts)
   body = makePostBody(conf, email, token, parts);
   submissionUrl = submissionUrl();
   params = {'jsonBody', body};
-  %responseBody = urlread(submissionUrl, 'post', params);
-  %sURLLink = 'https://www.netfonds.no/quotes/paperhistory.php?paper=API.A&csv_format=csv'
-  
-  %jbody = sprintf('%s', body);
-  %command=['curl --insecure -X POST -d ','"',jbody,'" ', '"',submissionUrl,'"']; 
- % [status, output] =system(command);
-   ss =sprintf('echo jsonBody=%s | curl -k -X POST -d @- %s', body, submissionUrl);
-  [code, responseBody] = system(ss);
+  responseBody = urlread(submissionUrl, 'post', params);
   response = loadjson(responseBody);
 end
 
