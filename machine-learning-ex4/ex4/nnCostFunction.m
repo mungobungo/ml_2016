@@ -49,28 +49,33 @@ D_1 = 0;
         for k=1 : num_labels
         
         
-            ind1 = find(y==k);
-            ind0 = find(y!=k);
-            copy =y;
-            copy(ind1) = 1;
-            copy(ind0) = 0;       
+          
+            y_k = y_matrix(:,k);
+          %  copy(ind1) = 1;
+          %  copy(ind0) = 0;       
             
         
-            d_3 = a_3 - copy;
+            hx_k = h_x(:,k);
+            first = - y_k .*  log(hx_k );
+            second = (1 - y_k) .* log(1 - hx_k);
+
+        
+            J =  J +  sum((sum( first - second)));
+            
+            d_3 = a_3 - y_k;
+            
             
             s = sigmoidGradient(z_2);
+            
             t_red =Theta2(:,2:end); 
+            
             d_2 = (d_3 * t_red) .* s;
             
             
             D_1 = D_1 + d_2(:,2:end)' * a_1 ;
             
             D_2 = D_2 + d_3' * a_2;
-            first = -copy .*  log( h_x);
-            second = (1 - copy) .* log(1 - h_x);
-
-        
-            J =  J +   sum((sum(first- second)));
+            
         end
         
         J = J / (m);
