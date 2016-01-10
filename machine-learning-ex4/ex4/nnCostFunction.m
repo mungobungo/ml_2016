@@ -86,10 +86,11 @@ regular_theta1 = (lambda/m) * Theta1(:,2:end);
 
 Theta1_grad = [Theta1_grad (D_1(:,2:end)/(m) +  regular_theta1)]; 
 
-Theta2_grad = D_2/(m);
+Theta2_grad = D_2(:,1)/(m);
+
 regular_theta2 = (lambda/m) * Theta2(:,2:end);
 
-Theta2_grad(:, 2:end) = Theta2_grad(:, 2:end) + regular_theta2;
+Theta2_grad = [Theta2_grad   (D_2(:, 2:end)/m + regular_theta2)]
 
 % ====================== YOUR CODE HERE ======================
 % Instructions: You should complete the code by working through the
