@@ -51,8 +51,6 @@ D_1 = 0;
         
           
             y_k = y_matrix(:,k);
-          %  copy(ind1) = 1;
-          %  copy(ind0) = 0;       
             
         
             hx_k = h_x(:,k);
@@ -62,19 +60,15 @@ D_1 = 0;
         
             J =  J +  sum((sum( first - second)));
             
-            d_3 = a_3 - y_k;
+      
+            d_3 = a_3 - y_matrix;
+                        
+            d_2 = (d_3 * Theta2 (:,2:end) ) .* sigmoidGradient(z_2);
             
             
-            s = sigmoidGradient(z_2);
+            D_1 = D_1 +   d_2' * a_1;
             
-            t_red =Theta2(:,2:end); 
-            
-            d_2 = (d_3 * t_red) .* s;
-            
-            
-            D_1 = D_1 + d_2(:,2:end)' * a_1 ;
-            
-            D_2 = D_2 + d_3' * a_2;
+            D_2 = D_2 +   d_3' * a_2;
             
         end
         
@@ -86,8 +80,16 @@ ts2 = sum(sum((Theta2(:,2:end ).^ 2)));
 regularization = (lambda / (2*m)) * (ts1 + ts2);
 J = J +  regularization;
 
-Theta1_grad = D_1/m;
-Theta2_grad = D_2/m;
+Theta1_grad = D_1(:,1)/(m);
+
+regular_theta1 = (lambda/m) * Theta1(:,2:end);
+
+Theta1_grad = [Theta1_grad (D_1(:,2:end)/(m) +  regular_theta1)]; 
+
+Theta2_grad = D_2/(m);
+regular_theta2 = (lambda/m) * Theta2(:,2:end);
+
+Theta2_grad(:, 2:end) = Theta2_grad(:, 2:end) + regular_theta2;
 
 % ====================== YOUR CODE HERE ======================
 % Instructions: You should complete the code by working through the
