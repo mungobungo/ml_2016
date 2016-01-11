@@ -3,7 +3,85 @@ function [J grad] = nnCostFunction(nn_params, ...
                                    hidden_layer_size, ...
                                    num_labels, ...
                                    X, y, lambda)
-%NNCOSTFUNCTION Implements the neural network cost function for a two layer
+
+ gradcalc = [-0.0092783
+   0.0088991
+  -0.0083601
+   0.0076281
+  -0.0067480
+  -0.0055914
+   0.0131540
+   0.0197612
+   0.0082794
+  -0.0109273
+  -0.0201749
+  -0.0104983
+   0.0081159
+   0.0201475
+   0.0126295
+  -0.0058543
+  -0.0191100
+  -0.0151569
+   0.0031508
+   0.0180923
+   0.3145450
+   0.1110566
+   0.0974007
+   0.1489548
+   0.0383952
+   0.0448693
+   0.1777077
+   0.0775739
+   0.0589954
+   0.1474589
+   0.0359237
+   0.0384306
+   0.1595309
+   0.0735088
+   0.0601514
+   0.1438103
+   0.0339263
+   0.0315400];
+
+  numgrad3 = [ -9.2783e-03
+   8.8991e-03
+  -8.3601e-03
+   7.6281e-03
+  -6.7480e-03
+  -1.6768e-02
+   3.9433e-02
+   5.9336e-02
+   2.4764e-02
+  -3.2688e-02
+  -6.0174e-02
+  -3.1961e-02
+   2.4923e-02
+   5.9772e-02
+   3.8641e-02
+  -1.7370e-02
+  -5.7566e-02
+  -4.5196e-02
+   9.1459e-03
+   5.4610e-02
+   3.1454e-01
+   1.1106e-01
+   9.7401e-02
+   1.1868e-01
+   3.8193e-05
+   3.3693e-02
+   2.0399e-01
+   1.1715e-01
+   7.5480e-02
+   1.2570e-01
+  -4.0759e-03
+   1.6968e-02
+   1.7634e-01
+   1.1313e-01
+   8.6163e-02
+   1.3229e-01
+  -4.5296e-03
+   1.5005e-03];
+                                   %NNCOSTFUNCTION Implements the neural network cost function for a two layer
 %neural network which performs classification
 %   [J grad] = NNCOSTFUNCTON(nn_params, hidden_layer_size, num_labels, ...
 %   X, y, lambda) computes the cost and gradient of the neural network. The
@@ -80,17 +158,22 @@ ts2 = sum(sum((Theta2(:,2:end ).^ 2)));
 regularization = (lambda / (2*m)) * (ts1 + ts2);
 J = J +  regularization;
 
-Theta1_grad = D_1(:,1)/(m);
+Theta1_grad = D_1(:,1)/(m*input_layer_size);
 
 regular_theta1 = (lambda/m) * Theta1(:,2:end);
 
-Theta1_grad = [Theta1_grad (D_1(:,2:end)/(m) +  regular_theta1)]; 
 
-Theta2_grad = D_2(:,1)/(m);
+Theta1_grad = [Theta1_grad  regular_theta1 + (D_1(:,2:end)/(m * input_layer_size))];
+
+now_t1g = Theta1_grad ;
+Theta2_grad = D_2(:,1)/(m*input_layer_size);
 
 regular_theta2 = (lambda/m) * Theta2(:,2:end);
 
-Theta2_grad = [Theta2_grad   (D_2(:, 2:end)/m + regular_theta2)]
+Theta2_grad = [Theta2_grad   regular_theta2 + (D_2(:, 2:end)/(m*input_layer_size)) ];
+%c1g = reshape( numgrad3(1:20), size(Theta1_grad));
+
+%c2g = reshape( numgrad3(21:end), size(Theta2_grad));
 
 % ====================== YOUR CODE HERE ======================
 % Instructions: You should complete the code by working through the
@@ -129,7 +212,6 @@ Theta2_grad = [Theta2_grad   (D_2(:, 2:end)/m + regular_theta2)]
 % =========================================================================
 
 % Unroll gradients
-grad = [Theta1_grad(:) ; Theta2_grad(:)]/input_layer_size;
-
+grad = [Theta1_grad(:) ; Theta2_grad(:)];
 
 end
