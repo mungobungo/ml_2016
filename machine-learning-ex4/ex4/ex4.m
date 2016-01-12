@@ -120,7 +120,7 @@ fprintf('%f ', g);
 fprintf('\n\n');
 
 fprintf('Program paused. Press enter to continue.\n');
-return;
+
 pause;
 
 
@@ -174,7 +174,7 @@ fprintf(['\n\nCost at (fixed) debugging parameters (w/ lambda = 10): %f ' ...
 
 fprintf('Program paused. Press enter to continue.\n');
 pause;
-
+return;
 
 %% =================== Part 8: Training NN ===================
 %  You have now implemented all the code necessary to train a neural 

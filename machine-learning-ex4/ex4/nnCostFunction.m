@@ -124,7 +124,8 @@ D_1 = 0;
         a_3 = sigmoid(z_3);
         h_x = a_3;
     
-        for k=1 : num_labels
+      
+      for k=1 : num_labels
         
         
           
@@ -139,18 +140,23 @@ D_1 = 0;
             J =  J +  sum((sum( first - second)));
             
       
-            d_3 = a_3 - y_matrix;
-                        
-            d_2 = (d_3 * Theta2 (:,2:end) ) .* sigmoidGradient(z_2);
-            
-            
-            D_1 = D_1 +   d_2' * a_1;
-            
-            D_2 = D_2 +   d_3' * a_2;
+    
             
         end
+                d_3 = a_3 - y_matrix;
+                        
+            d_2 = ((d_3* Theta2(:,2:end)) .* sigmoidGradient(z_2));
+            
+            
+            D_1 = D_1 +    d_2'*a_1;
+            
+            D_2 = D_2 +    d_3'*a_2;
         
         J = J / (m);
+        
+gg= [ 0.76614;0.97990;0.37246;0.49749;0.64174;0.74614; ... 
+0.88342;0.56876;0.58467;0.59814;1.92598;1.94462;1.98965;2.17855; ...
+2.47834;2.50225;2.52644;2.72233];
 
 ts1 = sum(sum((Theta1(:,2:end ).^ 2)));
 ts2 = sum(sum((Theta2(:,2:end ).^ 2)));
@@ -158,19 +164,39 @@ ts2 = sum(sum((Theta2(:,2:end ).^ 2)));
 regularization = (lambda / (2*m)) * (ts1 + ts2);
 J = J +  regularization;
 
-Theta1_grad = D_1(:,1)/(m*input_layer_size);
+D_1_first = D_1(:,1);
+D_1_rest = D_1(:,2:end);
+mlayer = m;
+lambda_dm = lambda/m;
 
-regular_theta1 = (lambda/m) * Theta1(:,2:end);
+Theta1_grad1 = D_1_first/mlayer;
+
+regular_theta1 = lambda_dm * Theta1(:,2:end);
+
+Theta1_grad = Theta1_grad1/m;
+%Theta1_grad  = [Theta1_grad1  regular_theta1 + (D_1_rest/mlayer)];
 
 
-Theta1_grad = [Theta1_grad  regular_theta1 + (D_1(:,2:end)/(m * input_layer_size))];
+D_2_first = D_2(:,1);
+D_2_rest = D_2(:, 2:end);
+Theta2_grad1 = D_2_first;
 
-now_t1g = Theta1_grad ;
-Theta2_grad = D_2(:,1)/(m*input_layer_size);
+regular_theta2 = lambda_dm * Theta2(:,2:end);
 
-regular_theta2 = (lambda/m) * Theta2(:,2:end);
+Theta2_grad = Theta2_grad1/m;
+%Theta2_grad = [Theta2_grad1   regular_theta2 + (D_2_rest/mlayer) ];
 
-Theta2_grad = [Theta2_grad   regular_theta2 + (D_2(:, 2:end)/(m*input_layer_size)) ];
+
+Theta1_grad_raveled = Theta1_grad / input_layer_size;
+
+Theta2_grad_raveled = Theta2_grad / input_layer_size;
+%gg1 = reshape(gg(1:6), 2,3);
+%gg2 = reshape(gg(7:end), 4,3);
+
+%gg1_i = gg1 * input_layer_size;
+%gg2_i = gg2 * input_layer_size;
+
+gg =gg *1;
 %c1g = reshape( numgrad3(1:20), size(Theta1_grad));
 
 %c2g = reshape( numgrad3(21:end), size(Theta2_grad));
@@ -212,6 +238,6 @@ Theta2_grad = [Theta2_grad   regular_theta2 + (D_2(:, 2:end)/(m*input_layer_size
 % =========================================================================
 
 % Unroll gradients
-grad = [Theta1_grad(:) ; Theta2_grad(:)];
+grad = [Theta1_grad(:) ; Theta2_grad(:)]/input_layer_size;
 
 end
