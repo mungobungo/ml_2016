@@ -173,7 +173,7 @@ Theta1_grad1 = D_1_first/mlayer;
 
 regular_theta1 = lambda_dm * Theta1(:,2:end);
 
-Theta1_grad = Theta1_grad1/m;
+Theta1_grad = D_1*2/m;
 %Theta1_grad  = [Theta1_grad1  regular_theta1 + (D_1_rest/mlayer)];
 
 
@@ -183,7 +183,7 @@ Theta2_grad1 = D_2_first;
 
 regular_theta2 = lambda_dm * Theta2(:,2:end);
 
-Theta2_grad = Theta2_grad1/m;
+Theta2_grad = D_2*2/m;
 %Theta2_grad = [Theta2_grad1   regular_theta2 + (D_2_rest/mlayer) ];
 
 
