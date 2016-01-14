@@ -52,8 +52,38 @@ error_val   = zeros(m, 1);
 %
 
 % ---------------------- Sample Solution ----------------------
+       % Now, costFunction is a function that takes in only one argument
+       options = optimset('MaxIter', 200, 'GradObj', 'on');
 
 
+       for i = 1:m
+           % Compute train/cross validation errors using training examples 
+           xx =  X(1:i, :); 
+           yy = y(1:i);  
+          
+           
+           % Initialize Theta for train subset
+           initial_theta_t = zeros(size(xx, 2), 1); 
+           
+           % Create "short hand" for the cost function to calculate train theta
+           costFunction_t = @(t) linearRegCostFunction(xx, yy, t, 0);
+
+           % Minimize using fmincg
+           theta_t = fmincg(costFunction_t, initial_theta_t, options);
+           
+           error_train(i) = (1/(2*m)) * sum((xx*theta_t - yy ).^2);
+           
+           initial_theta_cv = zeros(size(Xval, 2), 1);
+           
+           % cost function to calculate cv theta
+           costFunction_cv = @(s) linearRegCostFunction(Xval, yval, s, 0);
+           
+           theta_cv = fmincg(costFunction_cv, initial_theta_cv, options);
+           
+           error_val(i) = (1/(2*m)) * sum((Xval*theta_cv - yval ).^2);
+           
+           
+       end
 
 
 
