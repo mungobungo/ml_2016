@@ -39,7 +39,31 @@ error_val = zeros(length(lambda_vec), 1);
 %
 %
 
+  options = optimset('MaxIter', 200, 'GradObj', 'on');
 
+
+       for i = 1:length(lambda_vec)
+           % Compute train/cross validation errors using training examples 
+           lambda = lambda_vec(i);
+         
+           
+           % Initialize Theta for train subset
+           initial_theta_t = zeros(size(X, 2), 1); 
+           
+           % Create "short hand" for the cost function to calculate train theta
+           costFunction_t = @(t) linearRegCostFunction(X, y, t, lambda);
+
+           % Minimize using fmincg
+           theta_t = fmincg(costFunction_t, initial_theta_t, options);
+           
+           error_train(i) = linearRegCostFunction(X, y, theta_t, 0);
+           
+           
+           error_val(i) = linearRegCostFunction(Xval, yval, theta_t, 0);
+
+           
+           
+       end
 
 
 
