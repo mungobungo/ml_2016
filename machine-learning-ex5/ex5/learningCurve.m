@@ -66,21 +66,16 @@ error_val   = zeros(m, 1);
            initial_theta_t = zeros(size(xx, 2), 1); 
            
            % Create "short hand" for the cost function to calculate train theta
-           costFunction_t = @(t) linearRegCostFunction(xx, yy, t, 0);
+           costFunction_t = @(t) linearRegCostFunction(xx, yy, t, lambda);
 
            % Minimize using fmincg
            theta_t = fmincg(costFunction_t, initial_theta_t, options);
            
-           error_train(i) = (1/(2*m)) * sum((xx*theta_t - yy ).^2);
+           error_train(i) = linearRegCostFunction(xx, yy, theta_t, 0);
            
-           initial_theta_cv = zeros(size(Xval, 2), 1);
            
-           % cost function to calculate cv theta
-           costFunction_cv = @(s) linearRegCostFunction(Xval, yval, s, 0);
-           
-           theta_cv = fmincg(costFunction_cv, initial_theta_cv, options);
-           
-           error_val(i) = (1/(2*m)) * sum((Xval*theta_t - yval ).^2);
+           error_val(i) = linearRegCostFunction(Xval, yval, theta_t, 0);
+
            
            
        end
