@@ -80,7 +80,7 @@ error_val   = zeros(m, 1);
            
            theta_cv = fmincg(costFunction_cv, initial_theta_cv, options);
            
-           error_val(i) = (1/(2*m)) * sum((Xval*theta_cv - yval ).^2);
+           error_val(i) = (1/(2*m)) * sum((Xval*theta_t - yval ).^2);
            
            
        end
