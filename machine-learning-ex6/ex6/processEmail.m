@@ -6,6 +6,7 @@ function word_indices = processEmail(email_contents)
 %   words contained in the email. 
 %
 
+
 % Load Vocabulary
 vocabList = getVocabList();
 
@@ -96,15 +97,17 @@ while ~isempty(email_contents)
     % Note: You can use strcmp(str1, str2) to compare two strings (str1 and
     %       str2). It will return 1 only if the two strings are equivalent.
     %
-
-
-
-
-
-
-
-
-
+   
+  %%  seems like it;s not enough
+  %% idx = lookup(vocabList, str);
+  %%  if idx > 0
+  %%    word_indices = [word_indices ; idx];
+  %%  end
+ 
+  match = strcmp(str, vocabList);
+  idxs = find(match);
+  word_indices = [word_indices ; idxs]; 
+    
 
     % =============================================================
 
