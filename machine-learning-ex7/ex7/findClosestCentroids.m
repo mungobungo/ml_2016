@@ -21,7 +21,22 @@ idx = zeros(size(X,1), 1);
 % Note: You can use a for-loop over the examples to compute this.
 %
 
+for i = 1:size(X,1)
+    closest_cost = 10^10;
+  closest_index = 1;
+  for c = 1:K
+   % X(i,:) 
+   % centroids(c,:);
 
+    cost = sum((X(i,:) - centroids(c,:)) .^ 2);
+    if cost < closest_cost
+      closest_cost = cost;
+      closest_index = c;
+    end
+    
+  end
+  idx(i) = closest_index;
+end
 
 
 
