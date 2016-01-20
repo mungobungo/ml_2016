@@ -12,6 +12,7 @@ vocabList = getVocabList();
 
 % Init return value
 word_indices = [];
+wid = [];
 
 % ========================== Preprocess Email ===========================
 
@@ -98,11 +99,11 @@ while ~isempty(email_contents)
     %       str2). It will return 1 only if the two strings are equivalent.
     %
    
-  %%  seems like it;s not enough
-  %% idx = lookup(vocabList, str);
-  %%  if idx > 0
-  %%    word_indices = [word_indices ; idx];
-  %%  end
+  % seems like it;s not enough
+   idx = lookup(vocabList, str);
+    if idx > 0
+      wid = [wid ; idx];
+    end
  
   match = strcmp(str, vocabList);
   idxs = find(match);
